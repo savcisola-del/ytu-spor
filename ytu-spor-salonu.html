@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YTÜ Spor Salonu — Yoğunluk Takip</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Lato:wght@300;400;700&display=swap');
+
+  :root {
+    --ytu-navy: #003087;
+    --ytu-navy-dark: #001f5c;
+    --ytu-navy-light: #0a3d99;
+    --ytu-gold: #C8A951;
+    --bg: #f4f5f9;
+    --white: #ffffff;
+    --text: #1a1a2e;
+    --muted: #7a7a9a;
+    --border: #e0e2ef;
+    --low: #00b87a;
+    --mid: #e8a000;
+    --high: #e03553;
+    --card-shadow: 0 4px 24px rgba(0,48,135,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Lato', sans-serif;
+    min-height: 100vh;
+    padding-bottom: 90px;
+  }
+
+  /* TOP HEADER */
+  .top-header {
+    background: var(--ytu-navy);
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: 0 2px 16px rgba(0,48,135,0.3);
+  }
+
+  .ytu-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .ytu-emblem {
+    width: 40px;
+    height: 40px;
+    background: var(--ytu-gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    color: var(--ytu-navy);
+    letter-spacing: -0.5px;
+    flex-shrink: 0;
+  }
+
+  .ytu-name {
+    display: flex;
+    flex-direction: column;
+  }
+  .ytu-name .main {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: white;
+    letter-spacing: 0.5px;
+  }
+  .ytu-name .sub {
+    font-size: 10px;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .header-clock {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ytu-gold);
+  }
+
+  /* HERO SECTION */
+  .hero {
+    background: linear-gradient(135deg, var(--ytu-navy-dark) 0%, var(--ytu-navy) 50%, var(--ytu-navy-light) 100%);
+    padding: 28px 20px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(200, 169, 81, 0.08);
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -20px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+
+  .hero-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ytu-gold);
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+
+  .hero-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 24px;
+    line-height: 1.2;
+  }
+
+  /* BIG STATUS */
+  .big-status {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 24px;
+    backdrop-filter: blur(8px);
+    position: relative;
+    z-index: 1;
+  }
+
+  .status-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .count-block {}
+  .count-number {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 72px;
+    font-weight: 800;
+    line-height: 1;
+    color: white;
+    transition: color 0.4s;
+  }
+  .count-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 4px;
+  }
+
+  .status-pill {
+    padding: 10px 20px;
+    border-radius: 100px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.4s;
+  }
+
+  /* Progress */
+  .progress-track {
+    background: rgba(255,255,255,0.15);
+    border-radius: 100px;
+    height: 6px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+  .progress-bar {
+    height: 100%;
+    border-radius: 100px;
+    transition: width 0.8s cubic-bezier(0.4,0,0.2,1), background 0.4s;
+  }
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: rgba(255,255,255,0.45);
+  }
+
+  .live-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 16px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 1px;
+  }
+  .live-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #00e5a0;
+    animation: blink 2s infinite;
+  }
+  @keyframes blink {
+    0%,100% { opacity:1; }
+    50% { opacity:0.3; }
+  }
+
+  /* SECTION */
+  .section {
+    padding: 20px 20px 0;
+  }
+  .section-head {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  /* QUICK STATS */
+  .quick-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+  .qstat {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 14px 12px;
+    text-align: center;
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--border);
+  }
+  .qstat-val {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--ytu-navy);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .qstat-lbl {
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    line-height: 1.3;
+  }
+
+  /* CHART */
+  .chart-card {
+    background: var(--white);
+    border-radius: 18px;
+    padding: 20px 16px 16px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--border);
+  }
+
+  .chart-wrap {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 72px;
+    margin-bottom: 8px;
+  }
+
+  .c-bar-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    height: 100%;
+    justify-content: flex-end;
+  }
+  .c-bar {
+    width: 100%;
+    border-radius: 3px 3px 0 0;
+    transition: height 0.5s ease;
+    min-height: 3px;
+  }
+  .c-bar-lbl {
+    font-size: 8px;
+    color: var(--muted);
+  }
+  .c-bar-wrap.now .c-bar-lbl {
+    color: var(--ytu-navy);
+    font-weight: 700;
+  }
+
+  /* BEST TIME */
+  .best-time-card {
+    background: linear-gradient(135deg, var(--ytu-navy) 0%, var(--ytu-navy-light) 100%);
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: var(--card-shadow);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .best-icon {
+    width: 48px; height: 48px;
+    background: rgba(200,169,81,0.2);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+  .best-info .label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 4px;
+  }
+  .best-info .value {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--ytu-gold);
+  }
+  .best-info .desc {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    margin-top: 2px;
+  }
+
+  /* TABS */
+  .tab-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--white);
+    border-top: 1px solid var(--border);
+    display: flex;
+    padding: 8px 0 12px;
+    z-index: 50;
+    box-shadow: 0 -4px 20px rgba(0,48,135,0.08);
+  }
+  .tab-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px 0;
+    transition: all 0.2s;
+  }
+  .tab-icon { font-size: 20px; }
+  .tab-lbl {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+    transition: color 0.2s;
+  }
+  .tab-btn.active .tab-lbl { color: var(--ytu-navy); }
+  .tab-btn.active .tab-icon { filter: none; }
+
+  /* VIEWS */
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* ADMIN */
+  .admin-section {
+    padding: 20px;
+  }
+  .admin-card {
+    background: var(--white);
+    border-radius: 18px;
+    padding: 22px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--border);
+    margin-bottom: 14px;
+  }
+  .admin-card-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ytu-navy);
+    margin-bottom: 18px;
+    letter-spacing: 0.5px;
+  }
+  .counter-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+  .cnt-btn {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    border: 2px solid var(--border);
+    background: var(--bg);
+    color: var(--ytu-navy);
+    font-size: 26px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 300;
+    transition: all 0.15s;
+  }
+  .cnt-btn:active { transform: scale(0.92); background: var(--border); }
+  .cnt-num {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 52px;
+    font-weight: 800;
+    color: var(--ytu-navy);
+    min-width: 80px;
+    text-align: center;
+  }
+  .fine-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+    justify-content: center;
+  }
+  .fine-btn {
+    padding: 8px 20px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    background: var(--bg);
+    color: var(--ytu-navy);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .fine-btn:active { background: var(--border); }
+
+  .save-btn {
+    width: 100%;
+    padding: 16px;
+    border-radius: 14px;
+    border: none;
+    background: var(--ytu-navy);
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    margin-top: 18px;
+    transition: all 0.2s;
+  }
+  .save-btn:active { opacity: 0.88; transform: scale(0.99); }
+
+  .cap-btn {
+    background: var(--bg);
+    color: var(--ytu-navy);
+    border: 2px solid var(--border);
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 80px; left: 50%;
+    transform: translateX(-50%) translateY(60px);
+    background: var(--ytu-navy);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 100px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 200;
+    white-space: nowrap;
+    box-shadow: 0 8px 24px rgba(0,48,135,0.3);
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* INFO CARD */
+  .info-card {
+    background: #fff8e8;
+    border: 1px solid #f0d98a;
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .info-card .icon { font-size: 18px; flex-shrink: 0; }
+  .info-card p { font-size: 12px; color: #7a6010; line-height: 1.5; }
+  .info-card p strong { color: #5a4500; }
+</style>
+</head>
+<body>
+
+<!-- TOP HEADER -->
+<div class="top-header">
+  <div class="ytu-brand">
+    <div class="ytu-emblem">YTÜ</div>
+    <div class="ytu-name">
+      <span class="main">Yıldız Teknik Üniversitesi</span>
+      <span class="sub">Spor Salonu Sistemi</span>
+    </div>
+  </div>
+  <div class="header-clock" id="clock">00:00</div>
+</div>
+
+<!-- VIEWER TAB -->
+<div class="view active" id="view-ana">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-label">Davutpaşa Kampüsü</div>
+    <div class="hero-title">Spor Salonu<br>Yoğunluk Durumu</div>
+
+    <div class="big-status">
+      <div class="status-row">
+        <div class="count-block">
+          <div class="count-number" id="countNum">0</div>
+          <div class="count-sub">/ <span id="maxCap">80</span> kişi kapasiteli</div>
+        </div>
+        <div class="status-pill" id="statusPill">Boş</div>
+      </div>
+      <div class="progress-track">
+        <div class="progress-bar" id="progBar" style="width:0%"></div>
+      </div>
+      <div class="progress-info">
+        <span>Boş</span>
+        <span id="pctText">%0 dolu</span>
+        <span>Dolu</span>
+      </div>
+      <div class="live-indicator">
+        <span class="live-dot"></span>
+        CANLI · Son güncelleme: <span id="lastUpdate">—</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUICK STATS -->
+  <div class="section">
+    <div class="section-head">Bugünün Özeti</div>
+    <div class="quick-stats">
+      <div class="qstat">
+        <div class="qstat-val" id="qs-peak" style="color:var(--high)">—</div>
+        <div class="qstat-lbl">En yoğun saat</div>
+      </div>
+      <div class="qstat">
+        <div class="qstat-val" id="qs-avg" style="color:var(--mid)">—</div>
+        <div class="qstat-lbl">Ort. kişi sayısı</div>
+      </div>
+      <div class="qstat">
+        <div class="qstat-val" id="qs-total" style="color:var(--ytu-navy)">—</div>
+        <div class="qstat-lbl">Gün içi güncelleme</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHART -->
+  <div class="section" style="margin-top:14px;">
+    <div class="section-head">Saatlik Yoğunluk Grafiği</div>
+    <div class="chart-card">
+      <div class="chart-wrap" id="chartWrap"></div>
+      <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;">
+        Saat (06:00 — 22:00)
+      </div>
+    </div>
+  </div>
+
+  <!-- BEST TIME -->
+  <div class="section" style="margin-top:14px;">
+    <div class="section-head">Öneri</div>
+    <div class="best-time-card">
+      <div class="best-icon">💡</div>
+      <div class="best-info">
+        <div class="label">En İyi Giriş Zamanı</div>
+        <div class="value" id="bestTime">07:00 – 09:00</div>
+        <div class="desc">Sabah saatleri genellikle en sakin dönem</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="height:20px;"></div>
+
+</div>
+
+<!-- ADMIN TAB -->
+<div class="view" id="view-admin">
+  <div class="admin-section">
+
+    <div class="info-card">
+      <span class="icon">ℹ️</span>
+      <p><strong>Görevli Paneli</strong> — Turnikeden geçen kişi sayısını buradan güncelleyin. Her güncelleme anlık yoğunluk haritasına yansır.</p>
+    </div>
+
+    <div class="admin-card">
+      <div class="admin-card-title">📍 Anlık Kişi Sayısı</div>
+      <div class="counter-row">
+        <button class="cnt-btn" onclick="adj(-10)">−</button>
+        <div class="cnt-num" id="adminNum">0</div>
+        <button class="cnt-btn" onclick="adj(10)">+</button>
+      </div>
+      <div class="fine-row">
+        <button class="fine-btn" onclick="adj(-1)">− 1</button>
+        <button class="fine-btn" onclick="adj(1)">+ 1</button>
+      </div>
+      <button class="save-btn" onclick="saveCount()">✓ Güncelle ve Kaydet</button>
+    </div>
+
+    <div class="admin-card">
+      <div class="admin-card-title">🏟️ Salon Kapasitesi</div>
+      <div class="counter-row">
+        <button class="cnt-btn" onclick="adjCap(-10)">−</button>
+        <div class="cnt-num" id="capNum">80</div>
+        <button class="cnt-btn" onclick="adjCap(10)">+</button>
+      </div>
+      <button class="save-btn cap-btn" onclick="saveCap()">Kapasiteyi Güncelle</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- BOTTOM TAB BAR -->
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('ana', this)">
+    <span class="tab-icon">🏋️</span>
+    <span class="tab-lbl">DURUM</span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('admin', this)">
+    <span class="tab-icon">⚙️</span>
+    <span class="tab-lbl">GÖREVLİ</span>
+  </button>
+</div>
+
+<div class="toast" id="toast">✓ Başarıyla güncellendi</div>
+
+<script>
+  let state = {
+    current: 12,
+    capacity: 80,
+    history: { 7:8, 8:22, 9:35, 10:45, 11:55, 12:48, 13:30 },
+    lastUpdate: null
+  };
+
+  try {
+    const s = localStorage.getItem('ytu_gym');
+    if (s) state = { ...state, ...JSON.parse(s) };
+  } catch(e) {}
+
+  function persist() {
+    try { localStorage.setItem('ytu_gym', JSON.stringify(state)); } catch(e) {}
+  }
+
+  function getColor(pct) {
+    if (pct < 40) return 'var(--low)';
+    if (pct < 70) return 'var(--mid)';
+    return 'var(--high)';
+  }
+  function getStatusText(pct) {
+    if (pct < 20) return 'Boş';
+    if (pct < 40) return 'Sakin';
+    if (pct < 60) return 'Orta';
+    if (pct < 80) return 'Yoğun';
+    return 'Çok Yoğun';
+  }
+  function getPillStyle(pct) {
+    if (pct < 40) return 'background:#d4f7ec;color:#00854f';
+    if (pct < 70) return 'background:#fff3cc;color:#8a6000';
+    return 'background:#fde0e5;color:#c0002f';
+  }
+
+  function updateUI() {
+    const pct = Math.min(100, Math.round((state.current / state.capacity) * 100));
+    const color = getColor(pct);
+
+    document.getElementById('countNum').textContent = state.current;
+    document.getElementById('maxCap').textContent = state.capacity;
+    document.getElementById('pctText').textContent = '%' + pct + ' dolu';
+    document.getElementById('progBar').style.width = pct + '%';
+    document.getElementById('progBar').style.background = color;
+
+    const pill = document.getElementById('statusPill');
+    pill.textContent = getStatusText(pct);
+    pill.style.cssText = getPillStyle(pct) + ';padding:10px 20px;border-radius:100px;font-family:Montserrat,sans-serif;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:1px;';
+
+    if (state.lastUpdate) {
+      document.getElementById('lastUpdate').textContent = state.lastUpdate;
+    }
+
+    document.getElementById('adminNum').textContent = state.current;
+    document.getElementById('capNum').textContent = state.capacity;
+
+    renderChart();
+    renderStats();
+  }
+
+  function renderChart() {
+    const wrap = document.getElementById('chartWrap');
+    const hours = [];
+    for (let h = 6; h <= 22; h++) hours.push(h);
+    const now = new Date().getHours();
+
+    wrap.innerHTML = hours.map(h => {
+      const val = state.history[h] || 0;
+      const pct = state.capacity > 0 ? (val / state.capacity) * 100 : 0;
+      const heightPct = Math.max(4, pct);
+      const isNow = h === now;
+      const color = val === 0 ? '#e0e2ef' : (isNow ? 'var(--ytu-navy)' : getColor(pct));
+      return `
+        <div class="c-bar-wrap ${isNow ? 'now' : ''}">
+          <div class="c-bar" style="height:${heightPct}%;background:${color};${isNow ? 'box-shadow:0 0 8px rgba(0,48,135,0.4)' : ''}"></div>
+          <div class="c-bar-lbl">${h}</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderStats() {
+    const entries = Object.entries(state.history).filter(([,v]) => v > 0);
+    if (entries.length === 0) return;
+    const peak = entries.reduce((a,b) => b[1]>a[1]?b:a);
+    const avg = Math.round(entries.reduce((s,[,v])=>s+v,0)/entries.length);
+    document.getElementById('qs-peak').textContent = peak[0]+':00';
+    document.getElementById('qs-avg').textContent = avg;
+    document.getElementById('qs-total').textContent = entries.length;
+
+    // Find quietest hour
+    const quiet = entries.reduce((a,b) => b[1]<a[1]?b:a);
+    document.getElementById('bestTime').textContent = quiet[0]+':00 – '+(parseInt(quiet[0])+2)+':00';
+  }
+
+  // Clock
+  function tick() {
+    const n = new Date();
+    const h = String(n.getHours()).padStart(2,'0');
+    const m = String(n.getMinutes()).padStart(2,'0');
+    document.getElementById('clock').textContent = h+':'+m;
+  }
+  setInterval(tick, 1000); tick();
+
+  // Admin
+  function adj(d) {
+    state.current = Math.max(0, Math.min(state.capacity, state.current + d));
+    document.getElementById('adminNum').textContent = state.current;
+  }
+  function adjCap(d) {
+    state.capacity = Math.max(10, state.capacity + d);
+    document.getElementById('capNum').textContent = state.capacity;
+  }
+  function saveCount() {
+    const h = new Date().getHours();
+    state.history[h] = state.current;
+    const n = new Date();
+    state.lastUpdate = String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
+    persist(); updateUI(); showToast('✓ Güncellendi!');
+  }
+  function saveCap() {
+    persist(); updateUI(); showToast('✓ Kapasite güncellendi');
+  }
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2200);
+  }
+
+  function switchTab(name, el) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('view-'+name).classList.add('active');
+    el.classList.add('active');
+  }
+
+  updateUI();
+</script>
+</body>
+</html>
